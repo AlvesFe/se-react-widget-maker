@@ -22,4 +22,3 @@ VITE_TWITCH_CHANNEL=your_channel_name
 6. Edit the `src/app/index.tsx` file to create your custom widget
 7. When you are done, run `yarn build` to create the production build
 8. Copy the content of the `build` folder and paste it in the custom widget section of your Streamelements Overlay Editor
-
