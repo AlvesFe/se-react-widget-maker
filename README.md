@@ -1,54 +1,25 @@
-# React + TypeScript + Vite
+# Streamelements React Widget Maker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a simple tool to create a custom widget for Streamelements using React.
 
-Currently, two official plugins are available:
+## Requirements
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- A Twitch account (https://www.twitch.tv/)
+- A Streamelements account (https://streamelements.com/) to get a access token
 
-## Expanding the ESLint configuration
+## How to use
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-});
+1. Clone this repository
+2. Create a `.env` file in the root directory and add your access token and channel name (you can find your access token (JWT) [here](https://streamelements.com/dashboard/account/channels))
+Example:
 ```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x";
-import reactDom from "eslint-plugin-react-dom";
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    "react-x": reactX,
-    "react-dom": reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs["recommended-typescript"].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-});
+VITE_SE_TOKEN=your_access_token
+VITE_TWITCH_CHANNEL=your_channel_name
 ```
+3. Run `yarn install` to install the dependencies
+4. Run `yarn dev` to start the development server
+5. Open your browser and go to `http://localhost:5173/`
+6. Edit the `src/app/index.tsx` file to create your custom widget
+7. When you are done, run `yarn build` to create the production build
+8. Copy the content of the `build` folder and paste it in the custom widget section of your Streamelements Overlay Editor
+
