@@ -21,7 +21,7 @@ export const StreamProvider = ({ children }: { children: JSX.Element }) => {
   }, []);
 
   useMemo(() => {
-    createConnections();
+    createConnections().catch(console.error);
   }, [createConnections]);
 
   const contextValue = useMemo(() => ({ event }), [event]);
