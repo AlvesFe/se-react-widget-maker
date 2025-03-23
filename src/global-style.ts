@@ -7,4 +7,12 @@ export const GlobalStyle = createGlobalStyle`
     font-family: 'Roboto', sans-serif;
     background:rgba(0, 0, 0, 0);
   }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body > #created-info {
+    display: none;
+  }
 `;
