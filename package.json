@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsx scripts/build.ts",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -23,11 +23,13 @@
     "@types/react-dom": "^19.0.4",
     "@types/tmi.js": "^1.8.6",
     "@vitejs/plugin-react": "^4.3.4",
+    "chalk": "^5.4.1",
     "eslint": "^9.21.0",
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^15.15.0",
     "prettier": "3.5.3",
+    "tsx": "^4.19.3",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.24.1",
     "vite": "^6.2.0"
