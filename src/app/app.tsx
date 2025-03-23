@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { StreamContext } from '../providers/stream-provider';
 import { EventItem } from './components/event-item';
 import { EventTypes, StreamEvent } from '../providers/stream-provider/types';
+import { EventWrapperContainer } from './styles';
 
 // This is a sample component that listens to the StreamContext and displays the events
 // that are dispatched to it. It will only display the last 10 events.
@@ -31,14 +32,12 @@ export const App = () => {
   }, [seEvent]);
 
   return (
-    <div>
+    <EventWrapperContainer>
       <h1>Events</h1>
-      <div>
-        {events.map((event) => (
-          // This is a sample component that displays the event data
-          <EventItem key={event.activityId} event={event} />
-        ))}
-      </div>
-    </div>
+      {events.map((event) => (
+        // This is a sample component that displays the event data
+        <EventItem key={event.activityId} event={event} />
+      ))}
+    </EventWrapperContainer>
   );
 };

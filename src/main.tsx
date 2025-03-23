@@ -6,9 +6,9 @@ import { GlobalStyle } from './global-style.ts';
 
 createRoot(document.getElementById('root')!).render(
   <StreamProvider>
-      <StrictMode>
-        <GlobalStyle />
-        <App />
-      </StrictMode>
+    <StrictMode>
+      <GlobalStyle />
+      <App />
+    </StrictMode>
   </StreamProvider>,
 );
