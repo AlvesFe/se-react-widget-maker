@@ -1,5 +1,5 @@
 import { execSync } from 'child_process';
-import { copyFileSync, existsSync, mkdirSync, readdirSync, rmSync } from 'fs';
+import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import chalk from 'chalk';
 
@@ -15,6 +15,10 @@ if (!existsSync(build)) {
   rmSync(build, { recursive: true });
   mkdirSync(build);
 }
+
+const indexHtml = join(dist, 'index.html');
+const html = readFileSync(indexHtml, 'utf-8');
+writeFileSync(indexHtml, html.replace('></script>', ' defer></script>'));
 
 console.log(chalk.white('Copying files to the build folder...'));
 copyFileSync(join(dist, 'index.html'), join(build, 'index.html'));
