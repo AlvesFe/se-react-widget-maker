@@ -34,8 +34,7 @@ export const chatApi = async (onMessage: (info: ChatInfo) => void): Promise<void
     channels: [import.meta.env.VITE_TWITCH_CHANNEL],
   });
 
-  await client.connect();
-  client.on("connected", () => console.info("Connected to Twitch chat"));
+  await client.connect().then(() => console.info('Connected to Twitch chat'));
   client.on("message", (channel, tags, message, self) => {
     onMessage({ channel, tags, message, self });
   });
