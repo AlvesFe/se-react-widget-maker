@@ -3,5 +3,4 @@ import { StreamContextType } from './types';
 
 export const StreamContext = createContext<StreamContextType>({
   event: null,
-  chat: null,
 });

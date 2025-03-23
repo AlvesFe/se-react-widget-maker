@@ -2,17 +2,18 @@ import { JSX, useCallback, useMemo, useState } from 'react';
 import { chatApi, seApi } from './api';
 import { StreamContext } from './context';
 import { ChatInfo, StreamEvent } from './types';
+import { chatEventFactory } from './factory';
 
 export const StreamProvider = ({ children }: { children: JSX.Element }) => {
   const [event, setEvent] = useState<StreamEvent | null>(null);
-  const [chat, setChat] = useState<ChatInfo | null>(null);
 
   const onEventUpdate = (data: StreamEvent) => {
+    console.log('Event update:', data);
     setEvent(data);
   };
 
   const onMessage = (info: ChatInfo) => {
-    setChat(info);
+    setEvent(chatEventFactory(info));
   };
 
   const createConnections = useCallback(async () => {
@@ -23,7 +24,7 @@ export const StreamProvider = ({ children }: { children: JSX.Element }) => {
     createConnections();
   }, [createConnections]);
 
-  const contextValue = useMemo(() => ({ event, chat }), [event, chat]);
+  const contextValue = useMemo(() => ({ event }), [event]);
 
   return (
     <StreamContext.Provider value={contextValue}>{children}</StreamContext.Provider>

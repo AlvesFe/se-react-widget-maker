@@ -1,15 +1,18 @@
 import { useContext, useEffect, useState } from 'react';
-import { ChatEvent, Event, EventTypes, FollowEvent } from './types';
 import { StreamContext } from '../providers/stream-provider';
+import { EventItem } from './components/event-item';
+import { EventTypes, StreamEvent } from '../providers/stream-provider/types';
 
+// This is a sample component that listens to the StreamContext and displays the events
+// that are dispatched to it. It will only display the last 10 events.
 export const App = () => {
-  const [events, setEvents] = useState<Event[]>([]);
+  const [events, setEvents] = useState<StreamEvent[]>([]);
 
-  const { event: seEvent, chat } = useContext(StreamContext);
+  const { event: seEvent } = useContext(StreamContext);
 
-  const addEvent = (event: Event) =>
+  const addEvent = (event: StreamEvent) =>
     setEvents((prevEvents) => {
-      if (prevEvents.some((e) => e.id === event.id)) {
+      if (prevEvents.some((e) => e.activityId === event.activityId)) {
         return prevEvents;
       }
 
@@ -21,56 +24,21 @@ export const App = () => {
     });
 
   useEffect(() => {
-    if (chat?.message) {
-      console.info('Chat message:', chat);
-      const message: ChatEvent = {
-        id: chat.tags.id as string,
-        displayName: chat.tags['display-name'] as string,
-        message: chat.message,
-        sentAt: chat.tags['tmi-sent-ts'] as string,
-        type: EventTypes.CHAT,
-      };
-
-      addEvent(message);
+    if (!seEvent || !Object.values(EventTypes).includes(seEvent.type)) {
+      return;
     }
-  }, [chat]);
-
-  useEffect(() => {
-    if (seEvent?.type === EventTypes.FOLLOW) {
-      console.info('Follow event:', seEvent);
-      const event: FollowEvent = {
-        id: seEvent.activityId,
-        displayName: seEvent.data.displayName,
-        type: EventTypes.FOLLOW,
-        followedAt: seEvent.createdAt,
-      };
-
-      addEvent(event);
-    }
+    addEvent(seEvent);
   }, [seEvent]);
 
   return (
     <div>
       <h1>Events</h1>
-      <ul>
-        {events.map((event) => {
-          if (event.type === EventTypes.CHAT) {
-            return (
-              <li key={event.id}>
-                <strong>{event.displayName}</strong> sent: {event.message}
-              </li>
-            );
-          }
-
-          if (event.type === EventTypes.FOLLOW) {
-            return (
-              <li key={event.id}>
-                <strong>{event.displayName}</strong> followed!
-              </li>
-            );
-          }
-        })}
-      </ul>
+      <div>
+        {events.map((event) => (
+          // This is a sample component that displays the event data
+          <EventItem key={event.activityId} event={event} />
+        ))}
+      </div>
     </div>
   );
 };
