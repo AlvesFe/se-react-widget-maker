@@ -1,5 +1,5 @@
 import { EventTypes } from '../../../providers/stream-provider/types';
-import { EventTypeState } from './ecent-item.types';
+import { EventTypeState } from './event-item.types';
 
 export const EventTypeStateMap: ReadonlyMap<EventTypes, EventTypeState> = new Map([
   [EventTypes.CHAT, { bgColor: 'rgb(146, 246, 243)', textColor: 'rgb(0, 0, 0)' }],
