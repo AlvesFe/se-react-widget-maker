@@ -1,32 +1,32 @@
-import { JSX, useCallback, useMemo, useState } from 'react';
-import { chatApi, seApi } from './api';
+import { JSX, useMemo, useState } from 'react';
 import { StreamContext } from './context';
-import { ChatInfo, StreamEvent } from './types';
-import { chatEventFactory } from './factory';
+import { StreamElementsEvent } from './types/stream-elements.types';
+import { StreamEventFactory } from './factory';
+import { StreamProviderEvent } from './types/stream-provider.types';
 
 export const StreamProvider = ({ children }: { children: JSX.Element }) => {
-  const [event, setEvent] = useState<StreamEvent | null>(null);
+  const [event, setEvent] = useState<StreamProviderEvent | null>(null);
 
-  const onEventUpdate = (data: StreamEvent) => {
-    console.log('Event update:', data);
-    setEvent(data);
-  };
+  window.addEventListener('onEventReceived', (event: Event) => {
+    const customEvent = event as CustomEvent<StreamElementsEvent>;
+    const streamEvent = StreamEventFactory(customEvent.detail);
+    setEvent(streamEvent);
+  });
 
-  const onMessage = (info: ChatInfo) => {
-    setEvent(chatEventFactory(info));
-  };
-
-  const createConnections = useCallback(async () => {
-    await Promise.all([seApi(onEventUpdate), chatApi(onMessage)]);
-  }, []);
-
-  useMemo(() => {
-    createConnections().catch(console.error);
-  }, [createConnections]);
+  if (import.meta.env.MODE === 'development') {
+    window.sendStreamEvent = (event: StreamElementsEvent) => {
+      const customEvent = new CustomEvent('onEventReceived', {
+        detail: event,
+      });
+      window.dispatchEvent(customEvent);
+    };
+  }
 
   const contextValue = useMemo(() => ({ event }), [event]);
 
   return (
-    <StreamContext.Provider value={contextValue}>{children}</StreamContext.Provider>
+    <StreamContext.Provider value={contextValue}>
+      {children}
+    </StreamContext.Provider>
   );
 };

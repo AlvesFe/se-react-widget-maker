@@ -1,90 +1,89 @@
-import {
-  ChatEvent,
-  CheerSeEvent,
-  EventTypes,
-  FollowSeEvent,
-  RaidSeEvent,
-  StreamEvent,
-  SubscribeSeEvent,
-} from '../../../providers/stream-provider/types';
+import { v4 } from 'uuid';
+import { Emote } from '../../../providers/stream-provider/types/stream-elements.types';
 import { DefaultState, EventTypeStateMap } from './event-item.constansts';
-import { EventItemContainer } from './event-item.style';
+import { EventItemContainer, MessageContainer } from './event-item.style';
+import {
+  StreamEventData,
+  StreamProviderEvent,
+} from '../../../providers/stream-provider/types/stream-provider.types';
 
-export const EventItem = ({ event }: Readonly<{ event: StreamEvent }>) => {
+const buildMessageArray = (message: string, emotes: Emote[]) => {
+  const words = message.split(' ');
+  return words
+    .map((word) => {
+      const emote = emotes.find((emote) => emote.name === word);
+      if (emote) {
+        const url = emote.urls[4] ?? emote.urls[2] ?? emote.urls[1];
+        const uuid = v4();
+        return `<img class="emote-image" key=${uuid} src=${url} alt=${emote.name} />`;
+      }
+      return word;
+    })
+    .join('');
+};
+
+export const EventItem = ({
+  event,
+}: Readonly<{ event: StreamProviderEvent }>) => {
   const state = EventTypeStateMap.get(event.type) ?? DefaultState;
-  if (event.type === EventTypes.CHAT) {
-    const chatEvent = event as ChatEvent;
+  if (event.type === 'message') {
+    const messageData = event.data as Required<StreamEventData>;
     return (
       <EventItemContainer color={state}>
-        <strong>{chatEvent.data.displayName}</strong> sent:{' '}
-        {chatEvent.data.message}
+        <span>
+          <strong>{event.data.displayName}</strong> sent:
+        </span>
+        <MessageContainer
+          dangerouslySetInnerHTML={{
+            __html: buildMessageArray(messageData.message, messageData.emotes),
+          }}
+        />
       </EventItemContainer>
     );
   }
 
-  if (event.type === EventTypes.FOLLOW) {
-    const followEvent = event as FollowSeEvent;
+  if (event.type === 'follower' || event.type === 'follower-latest') {
     return (
       <EventItemContainer color={state}>
-        <div>
-          <strong>{followEvent.data.displayName}</strong> followed!
-        </div>
+        <span>
+          <strong>{event.data.displayName}</strong> followed!
+        </span>
       </EventItemContainer>
     );
   }
 
-  if (event.type === EventTypes.CHEER) {
-    const cheerEvent = event as CheerSeEvent;
+  if (event.type === 'subscriber') {
     return (
       <EventItemContainer color={state}>
-        <div>
-          <strong>{cheerEvent.data.displayName}</strong> cheered{' '}
-          {cheerEvent.data.amount} bits!
-        </div>
+        <span>
+          <strong>{event.data.displayName}</strong> subscribed!
+        </span>
       </EventItemContainer>
     );
   }
 
-  if (event.type === EventTypes.RAID) {
-    const raidEvent = event as RaidSeEvent;
+  if (event.type === 'cheer') {
     return (
       <EventItemContainer color={state}>
-        <div>
-          <strong>{raidEvent.data.displayName}</strong> raided with{' '}
-          {raidEvent.data.amount} viewers!
-        </div>
+        <span>
+          <strong>{event.data.displayName}</strong> cheered {event.data.amount}{' '}
+          bits!
+        </span>
       </EventItemContainer>
     );
   }
 
-  const isSubscription = event.type === EventTypes.SUBSCRIPTION;
-  const isGiftSubscription =
-    isSubscription && (event as SubscribeSeEvent).data.gifted;
-
-  if (isGiftSubscription) {
-    const subscriptionEvent = event as SubscribeSeEvent;
+  if (event.type === 'raid') {
     return (
       <EventItemContainer color={state}>
-        <div>
-          <strong>{subscriptionEvent.data.sender}</strong> gifted a subscription
-          to <strong>{subscriptionEvent.data.displayName}</strong>!
-        </div>
-      </EventItemContainer>
-    );
-  }
-
-  if (isSubscription) {
-    const subscriptionEvent = event as SubscribeSeEvent;
-    return (
-      <EventItemContainer color={state}>
-        <div>
-          <strong>{subscriptionEvent.data.displayName}</strong> subscribed for{' '}
-          {subscriptionEvent.data.amount}{' '}
-          {subscriptionEvent.data.amount > 1 ? 'months' : 'month'}!
-        </div>
+        <span>
+          <strong>{event.data.displayName}</strong> raided with{' '}
+          {event.data.amount} viewers!
+        </span>
       </EventItemContainer>
     );
   }
 
   console.warn('Unknown event type', { type: event.type });
+  return null;
 };

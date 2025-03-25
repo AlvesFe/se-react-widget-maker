@@ -1,27 +1,83 @@
-import { v4 as uuidv4} from 'uuid';
-import { ChatEvent, ChatInfo, EventTypes } from './types';
+import { EventListener, FollowerLatestEvent, MessageEvent, StreamElementsEvent } from './types/stream-elements.types';
+import { StreamEventType, StreamProviderEvent } from './types/stream-provider.types';
 
-export const chatEventFactory = (event: ChatInfo): ChatEvent => {
-  const id = event.tags.id ?? uuidv4();
-  const displayName = event.tags['display-name'] ?? 'Unknown';
-  const date = new Date(parseInt(event.tags['tmi-sent-ts'] ?? '0', 10));
-  const sentAt = date.toISOString();
+export const StreamEventFactory = (seEvent: StreamElementsEvent): StreamProviderEvent | null => {
+  const { event, listener } = seEvent;
+
+  switch (listener) {
+    case 'follower-latest':
+      return FollowerLatestEventFactory(event);
+    case 'message':
+      return MessageEventFactory(event);
+    case 'event':
+      return EventFactory(seEvent);
+    default:
+      throw new Error('not implemented');
+  }
+};
+
+export const FollowerLatestEventFactory = (seEvent: FollowerLatestEvent): StreamProviderEvent => {
+  const date = new Date().toISOString();
   return {
-    activityId: id,
-    _id: id,
-    channel: event.channel,
-    createdAt: sentAt,
+    type: 'follower-latest',
+    id: seEvent._id,
+    createdAt: date,
+    updatedAt: date,
     isMock: false,
-    provider: 'tmi.js',
-    sessionEventsCount: 1,
-    type: EventTypes.CHAT,
-    updatedAt: sentAt,
     data: {
-      message: event.message,
-      avatar: '',
-      displayName,
-      providerId: event.tags['user-id'] ?? '',
-      username: event.tags.username ?? '',
+      displayName: seEvent.displayName,
+      username: seEvent.name,
     },
-  };
+  }
 }
+
+export const MessageEventFactory = (seEvent: MessageEvent): StreamProviderEvent => {
+  const date = new Date(seEvent.data.time).toISOString();
+  return {
+    type: 'message',
+    id: seEvent.data.msgId,
+    channel: seEvent.data.channel,
+    createdAt: date,
+    updatedAt: date,
+    isMock: false,
+    data: {
+      displayName: seEvent.data.displayName,
+      username: seEvent.data.nick,
+      message: seEvent.data.text,
+      emotes: seEvent.data.emotes,
+      badges: seEvent.data.badges,
+      displayColor: seEvent.data.displayColor,
+    },
+  }
+};
+
+export const EventFactory = ({ event }: EventListener): StreamProviderEvent => {
+  const baseEvent: StreamProviderEvent = {
+    id: event.activityId,
+    type: event.type as StreamEventType,
+    channel: event.channel,
+    createdAt: event.createdAt,
+    updatedAt: event.updatedAt,
+    isMock: event.isMock,
+    data: {
+      displayName: event.data.displayName,
+      username: event.data.username,
+      avatar: event.data.avatar,
+    },
+  }
+
+  if (event.type === 'cheer') {
+    baseEvent.data.amount = event.data.amount;
+    baseEvent.data.message = event.data.message;
+  }
+
+  if (event.type === 'subscriber' && event.data.message) {
+    baseEvent.data.message = event.data.message
+  }
+
+  if (event.type === 'raid') {
+    baseEvent.data.amount = event.data.amount;
+  }
+
+  return baseEvent;
+};
