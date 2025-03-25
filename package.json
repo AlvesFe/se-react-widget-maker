@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "tsx scripts/build.ts",
     "lint": "eslint .",
+    "prepreview": "tsc -b && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -19,6 +20,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
+    "@faker-js/faker": "^9.6.0",
     "@types/node": "^22.13.11",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",

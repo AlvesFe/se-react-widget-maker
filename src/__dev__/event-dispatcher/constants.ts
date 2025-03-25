@@ -1,0 +1,1 @@
+export const EVENT_TYPES = ['subscriber', 'cheer', 'raid', 'message', 'follower'] as const;
