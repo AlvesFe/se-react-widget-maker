@@ -16,7 +16,7 @@ export const StreamEventFactory = (seEvent: StreamElementsEvent): StreamProvider
     return EventFactory(seEvent);
   }
 
-  console.warn('Event not processed', seEvent);
+  console.warn('Event not processed', { listener });
   return null;
 };
 
