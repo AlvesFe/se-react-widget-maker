@@ -1,6 +1,6 @@
 import { Badge, Emote } from './stream-elements.types';
 
-export type StreamEventType = 'follower' | 'subscriber' | 'cheer' | 'raid' | 'message' | 'follower-latest';
+export type StreamEventType = 'follow' | 'subscriber' | 'cheer' | 'raid' | 'message' | 'follower-latest';
 
 export interface StreamEventData {
   avatar?: string;

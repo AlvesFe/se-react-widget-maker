@@ -42,7 +42,7 @@ export const EventItem = ({
     );
   }
 
-  if (event.type === 'follower' || event.type === 'follower-latest') {
+  if (event.type === 'follow' || event.type === 'follower-latest') {
     return (
       <EventItemContainer color={state}>
         <span>
@@ -84,6 +84,6 @@ export const EventItem = ({
     );
   }
 
-  console.warn('Unknown event type', { type: event.type });
+  console.warn('Not rendering event', event);
   return null;
 };

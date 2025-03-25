@@ -34,7 +34,7 @@ export interface RaidEvent extends BaseEvent {
 }
 
 export interface FollowerEvent extends BaseEvent {
-  type: 'follower';
+  type: 'follow';
   data: Omit<BaseEventData, 'amount'>;
 }
 

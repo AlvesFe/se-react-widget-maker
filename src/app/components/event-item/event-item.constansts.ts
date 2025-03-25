@@ -3,7 +3,7 @@ import { EventTypeState } from './event-item.types';
 
 export const EventTypeStateMap: ReadonlyMap<StreamEventType, EventTypeState> = new Map([
   ['message' , { bgColor: 'rgb(146, 246, 243)', textColor: 'rgb(0, 0, 0)' }],
-  ['follower', { bgColor: 'rgb(255, 39, 39)', textColor: 'rgb(255, 255, 255)' }],
+  ['follow', { bgColor: 'rgb(255, 39, 39)', textColor: 'rgb(255, 255, 255)' }],
   ['follower-latest', { bgColor: 'rgb(255, 39, 39)', textColor: 'rgb(255, 255, 255)' }],
   ['subscriber', { bgColor: 'rgb(88, 252, 0)', textColor: 'rgb(0, 0, 0)' }],
   ['cheer' , { bgColor: 'rgb(255, 255, 0)', textColor: 'rgb(0, 0, 0)' }],
