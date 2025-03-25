@@ -12,7 +12,8 @@ export const StreamEventFactory = (seEvent: StreamElementsEvent): StreamProvider
     case 'event':
       return EventFactory(seEvent);
     default:
-      throw new Error('not implemented');
+      console.warn('Unknown event type', seEvent);
+      return null;
   }
 };
 
