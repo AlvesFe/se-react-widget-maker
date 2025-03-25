@@ -4,17 +4,20 @@ import { StreamEventType, StreamProviderEvent } from './types/stream-provider.ty
 export const StreamEventFactory = (seEvent: StreamElementsEvent): StreamProviderEvent | null => {
   const { event, listener } = seEvent;
 
-  switch (listener) {
-    case 'follower-latest':
-      return FollowerLatestEventFactory(event);
-    case 'message':
-      return MessageEventFactory(event);
-    case 'event':
-      return EventFactory(seEvent);
-    default:
-      console.warn('Unknown event type', seEvent);
-      return null;
+  if (listener === 'follower-latest') {
+    return FollowerLatestEventFactory(event);
   }
+
+  if (listener === 'message') {
+    return MessageEventFactory(event);
+  }
+
+  if (listener === 'event') {
+    return EventFactory(seEvent);
+  }
+
+  console.warn('Event not processed', seEvent);
+  return null;
 };
 
 export const FollowerLatestEventFactory = (seEvent: FollowerLatestEvent): StreamProviderEvent => {
