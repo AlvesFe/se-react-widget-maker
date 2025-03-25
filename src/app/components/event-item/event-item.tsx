@@ -3,7 +3,7 @@ import { Emote } from '../../../providers/stream-provider/types/stream-elements.
 import { DefaultState, EventTypeStateMap } from './event-item.constansts';
 import { EventItemContainer, MessageContainer } from './event-item.style';
 import {
-  StreamEventData,
+  StreamEventType,
   StreamProviderEvent,
 } from '../../../providers/stream-provider/types/stream-provider.types';
 
@@ -26,8 +26,7 @@ export const EventItem = ({
   event,
 }: Readonly<{ event: StreamProviderEvent }>) => {
   const state = EventTypeStateMap.get(event.type) ?? DefaultState;
-  if (event.type === 'message') {
-    const messageData = event.data as Required<StreamEventData>;
+  if (event.type === StreamEventType.MESSAGE) {
     return (
       <EventItemContainer color={state}>
         <span>
@@ -35,14 +34,14 @@ export const EventItem = ({
         </span>
         <MessageContainer
           dangerouslySetInnerHTML={{
-            __html: buildMessageArray(messageData.message, messageData.emotes),
+            __html: buildMessageArray(event.data.message, event.data.emotes),
           }}
         />
       </EventItemContainer>
     );
   }
 
-  if (event.type === 'follow' || event.type === 'follower-latest') {
+  if (event.type === StreamEventType.FOLLOW || event.type === StreamEventType.FOLLOWER_LATEST) {
     return (
       <EventItemContainer color={state}>
         <span>
@@ -52,7 +51,7 @@ export const EventItem = ({
     );
   }
 
-  if (event.type === 'subscriber') {
+  if (event.type === StreamEventType.SUBSCRIBER) {
     return (
       <EventItemContainer color={state}>
         <span>
@@ -62,7 +61,7 @@ export const EventItem = ({
     );
   }
 
-  if (event.type === 'cheer') {
+  if (event.type === StreamEventType.CHEER) {
     return (
       <EventItemContainer color={state}>
         <span>
@@ -73,7 +72,7 @@ export const EventItem = ({
     );
   }
 
-  if (event.type === 'raid') {
+  if (event.type === StreamEventType.RAID) {
     return (
       <EventItemContainer color={state}>
         <span>
