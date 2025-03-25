@@ -18,6 +18,7 @@ export const DispatchButton = styled.button`
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   transition: background-color 0.3s;
   border: none;
+  padding: 0 0 4px 0;
   &:hover {
     background-color: #f55;
   }
@@ -45,14 +46,16 @@ export const OptionsMenu = styled.div`
       background-color: #f55;
     }
 
+    &:active {
+      background-color: #f00;
+    }
+
     &:first-child {
-      border-top-left-radius: 10px;
-      border-top-right-radius: 10px;
+      border-radius: 10px 10px 0 0;
     }
 
     &:last-child {
-      border-bottom-left-radius: 10px;
-      border-bottom-right-radius: 10px;
+      border-radius: 0 0 10px 10px;
     }
   }
 `;

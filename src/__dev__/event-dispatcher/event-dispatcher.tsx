@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { DispatchButton, OptionsMenu } from './event-dispatcher.style';
-import { EVENT_TYPES } from './constants';
+import { EVENT_TYPES, EVENT_TYPES_MAP } from './constants';
 import { generateMockEvent } from '../util/event-mock-factory';
 
 export const EventDispatcher = ({
@@ -30,7 +30,7 @@ export const EventDispatcher = ({
         <OptionsMenu>
           {EVENT_TYPES.map((type) => (
             <button key={type} onClick={() => dispatchEvent(type)}>
-              {type}
+              {EVENT_TYPES_MAP[type]}
             </button>
           ))}
         </OptionsMenu>
