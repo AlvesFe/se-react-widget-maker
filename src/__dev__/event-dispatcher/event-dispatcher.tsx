@@ -9,6 +9,9 @@ export const EventDispatcher = ({
   children: React.JSX.Element;
 }) => {
   const [optionsVisible, setOptionsVisible] = useState(false);
+  const [showEventDispatcher, setShowEventDispatcher] = useState(
+    import.meta.env.MODE !== 'production',
+  );
 
   const dispatchEvent = (type: string) => {
     const event = generateMockEvent(type);
@@ -17,9 +20,12 @@ export const EventDispatcher = ({
     });
 
     window.dispatchEvent(customEvent);
-  }
+  };
 
-  if (import.meta.env.MODE === 'production') {
+  window.toggleEventDispatcher = () =>
+    setShowEventDispatcher(!showEventDispatcher);
+
+  if (!showEventDispatcher) {
     return children;
   }
 

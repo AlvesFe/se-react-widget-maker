@@ -1,6 +1,45 @@
 import { faker } from '@faker-js/faker';
 import { StreamElementsEvent } from '../../providers/stream-provider/types/stream-elements.types';
 
+const twitchChatMessages = [
+  "boa jogada",
+  "esse cara joga muito",
+  "alguém clipe isso",
+  "que azar kkk",
+  "vai dar bom",
+  "tá lagando ou é só pra mim?",
+  "foco agora",
+  "essa música é boa",
+  "muito close call",
+  "caramba, quase!",
+  "jogaço hoje",
+  "belo trabalho",
+  "tá indo bem demais",
+  "chat calmo hoje",
+  "alguém sabe o setup que ele usa?",
+  "foi por pouco",
+  "risos kkk",
+  "não esperava essa",
+  "confia",
+  "isso foi absurdo"
+];
+
+const twitchBadges = [
+  {
+    "type": "broadcaster",
+    "version": "1",
+    "url": "https://static-cdn.jtvnw.net/badges/v1/5527c58c-fb7d-422d-b71b-f309dcb85cc1/3",
+    "description": "Broadcaster"
+  },
+  {
+    "type": "minecraft-15th-anniversary-celebration",
+    "version": "1",
+    "url": "https://static-cdn.jtvnw.net/badges/v1/178077b2-8b86-4f8d-927c-66ed6c1b025f/3",
+    "description": "Minecraft 15th Anniversary Celebration"
+  }
+]
+
+
 export function generateMockEvent(type: string): StreamElementsEvent {
   const commonData = {
     avatar: faker.image.avatar(),
@@ -78,21 +117,14 @@ export function generateMockEvent(type: string): StreamElementsEvent {
             userId: faker.string.uuid(),
             displayName: faker.internet.username(),
             displayColor: faker.color.rgb(),
-            badges: [
-              {
-                type: 'broadcaster',
-                version: '1',
-                url: faker.image.url(),
-                description: 'Broadcaster',
-              },
-            ],
+            badges: faker.helpers.arrayElements(twitchBadges, faker.number.int({ min: 0, max: 2 })),
             channel: faker.internet.username(),
-            text: faker.lorem.sentence(),
+            text: faker.helpers.arrayElement(twitchChatMessages),
             isAction: false,
             emotes: [],
             msgId: faker.string.uuid(),
           },
-          renderedText: faker.lorem.sentence(),
+          renderedText: faker.helpers.arrayElement(twitchChatMessages),
         },
       };
     default:

@@ -5,5 +5,6 @@ export {};
 declare global {
   interface Window {
     sendStreamEvent: (event: StreamElementsEvent) => void;
+    toggleEventDispatcher: () => void;
   }
 }
